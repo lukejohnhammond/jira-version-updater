@@ -1,0 +1,11 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "Luke Hammond",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.9.1"
+  }
+}
