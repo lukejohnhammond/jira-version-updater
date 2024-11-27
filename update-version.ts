@@ -14,14 +14,12 @@ const getPreviousVersion = (version: String) => {
 }
 
 const argVersion = process.argv[2];
+console.log('XX', argVersion)
 const targetBranch = process.argv[3];
 const prefix = process.argv[4];
 const subdomain = process.argv[5];
 
-
-getPreviousVersion(argVersion);
-
-
+// getPreviousVersion(argVersion);
 
 const generateDescription = (targetBranch, prefix, subdomain) => {
   execSync('git fetch --all');
