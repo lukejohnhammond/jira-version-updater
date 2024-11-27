@@ -1,27 +1,33 @@
 import { execSync } from 'child_process';
+import { log } from 'console';
 
 const getPreviousVersion = (version: String) => {
   const [mmp, prerelease]: string[] = version.split('-');
   const [major, minor, patch]: string[] = mmp.split('.');
-
+  let previousVersion: string|null  = null;
   if(parseInt(patch) !== 0 ) {
-    console.log(`${major}.${minor}.${parseInt(patch)-1}`)
+    previousVersion = `${major}.${minor}.${parseInt(patch)-1}`;
+    console.log(previousVersion);
+    return previousVersion;
   } else if (parseInt(minor) !== 0 ) {
-    console.log(`${major}.${parseInt(minor)-1}.${patch}`)
+    previousVersion = `${major}.${parseInt(minor)-1}.${patch}`;
+    console.log(previousVersion);
+    return previousVersion;
   } else {
-    console.log(`${parseInt(major)-1}.${minor}.${patch}`)
+    previousVersion = `${parseInt(major)-1}.${minor}.${patch}`;
+    console.log(previousVersion);
+    return previousVersion;
   }
 }
 
 const argVersion = process.argv[2];
-console.log('XX', argVersion)
 const targetBranch = process.argv[3];
 const prefix = process.argv[4];
 const subdomain = process.argv[5];
 
 // getPreviousVersion(argVersion);
 
-const generateDescription = (targetBranch, prefix, subdomain) => {
+const generateDescription = (argVersion, targetBranch, prefix, subdomain) => {
   execSync('git fetch --all');
   const cmd = 'git rev-parse';
 
@@ -29,6 +35,8 @@ const generateDescription = (targetBranch, prefix, subdomain) => {
   const lastCommitPrev = execSync(`${cmd} origin/${ targetBranch }`).toString().trim();
 
   // remove all commits that are not starting with prefix
+  const cmd2 = `git log --no-merges --grep='${ prefix }' --pretty=oneline ${lastCommitPrev}...${lastCommitCurr}`;
+  console.log(cmd2);
   const rawDescription = execSync(`git log --no-merges --grep='${ prefix }' --pretty=oneline ${lastCommitPrev}...${lastCommitCurr}`).toString().trim();
   const description = rawDescription
     .split(/\r\n|\r|\n/)
@@ -76,7 +84,7 @@ const generateDescription = (targetBranch, prefix, subdomain) => {
 }
 
 // if(process.argv[6] === 'desc') {
-  generateDescription(targetBranch, prefix, subdomain);
+  generateDescription(argVersion, targetBranch, prefix, subdomain);
 // } else if (process.argv[6] === 'tag') {
 //   // version[1] +=1;
 //   // console.log(version.join('.'));
