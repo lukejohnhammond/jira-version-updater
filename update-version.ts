@@ -23,7 +23,7 @@ getPreviousVersion(argVersion);
 
 
 
-const generateDescription = (targetBranch, prefix, subdomain) {
+const generateDescription = (targetBranch, prefix, subdomain) => {
   execSync('git fetch --all');
   const cmd = 'git rev-parse';
 
@@ -31,7 +31,7 @@ const generateDescription = (targetBranch, prefix, subdomain) {
   const lastCommitPrev = execSync(`${cmd} origin/${ targetBranch }`).toString().trim();
 
   // remove all commits that are not starting with prefix
-  const rawDescription = execSync(`git log --no-merges --grep='${ prefix }' --pretty=oneline ${lastCommitPrev}...${lastCommitCurr})`).toString().trim();
+  const rawDescription = execSync(`git log --no-merges --grep='${ prefix }' --pretty=oneline ${lastCommitPrev}...${lastCommitCurr}`).toString().trim();
   const description = rawDescription
     .split(/\r\n|\r|\n/)
     .map(item => item.split(' ')
